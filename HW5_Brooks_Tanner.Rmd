@@ -11,7 +11,7 @@ knit: (function(input_file, encoding) {
 
 
 
-```{r}
+```{r, echo = FALSE, message = FALSE}
 library("ggplot2")
 library("ggthemes")
 library("plotly")
@@ -23,7 +23,7 @@ library("shinydashboard")
 library("DT")
 library("reshape2")
 
-nfl <- read.csv("/Users/Tanner/Desktop/Fantasy Football Datasets/2021/Football2021.csv")
+nfl <- read.csv("Football2021.csv")
 
 nfl <- subset(nfl, select = -c(Pos, FPTS, DeffenseScore))
 names(nfl) <- c("Week", "Team_Abr", "Team", "Home_Game", "Score", "Opponent_Score", "Opponent",
@@ -86,7 +86,8 @@ ui <- dashboardPage(
       textInput("in_name","Division",value="AFC West"),
       menuItem("Fantasy Football Points & Winning %", tabName = "by_year"),
       menuItem("Offense vs. Defense", tabName = "off_vs_def"),
-      menuItem("Total Data", tabName = "raw_data")
+      menuItem("Total Data", tabName = "raw_data"),
+      menuItem("Purpose of Dashboard", tabName = "purpose")
     )
   ),
 
@@ -122,6 +123,37 @@ ui <- dashboardPage(
         h2("Total Team Statistics in ",textOutput("in_name3", inline=TRUE), " Division (2021)"),
         box(dataTableOutput("t_similar"), width= 500)
         
+      ),
+      
+      
+      
+      # fourth page
+      tabItem(
+      "purpose",
+      p("Possible values that can be used in the search bar: "), strong("AFC North, AFC South, AFC East, AFC West, NFC North, 
+                                                                 NFC South, NFC East, NFC West"),
+      h3("Dashboard Motivation"),
+      p("The motivation behind this dashboard is to visualize the NFL Fantasy Football and team statstics. I especially
+        want to show the impact of scoring on both defense and offense and their winning chances."),
+      h3("What I Want to Communicate / Why I Chose Each Figure/Table"),
+      p("For the first tab, I want to show the impact of total fantasy football points per team and their overall winning 
+        percentage. As an example, if we look at the Kansas City Chiefs, we can see that in the beginning they were scoring 
+        a lot of fantasy football points per game and their winning percentage was high. As the weeks went on we see that 
+        their total points started to dip and so did their record. As the season progresses, they start getting more 
+        fantasy points and their winning percentage gets larger."),
+      p("For the second tab, I want to show the contrast of each team's offensive points and defensive points allowed."),
+      p("For the third tab I want to provide an interactive table that contains all the raw data of each of the NFL teams. 
+        This allows the user to see the breakdown of each team's statistics such as total offensive passing yards, running 
+        yards, touchdowns and total defensive passing yards allowed, running yards allowed and touchdowns allowed. The table 
+        gives the user an in-depth and comprehensive analysis into comparing teams at all different levels."),
+      h3("Options for User"),
+      p("The user is able to interact with the first plot to see and compare each team within their respective division 
+        winning percentages and total fantasy football points scored for a given week. The other option the user has 
+        to interact and dig around in the data more is the 'Search' feature in the left panel. To use this search 
+        navigation, the user will type in a divisional region. There are a total of eight regions and can take in the 
+        following values: "),
+      strong("AFC North, AFC South, AFC East, AFC West, NFC North, NFC South, NFC East, NFC West")
+        
       )
       
       
@@ -130,6 +162,9 @@ ui <- dashboardPage(
   )
 
 )
+
+
+
 
 server <- function(input, output) {
 
@@ -145,6 +180,9 @@ server <- function(input, output) {
     input$in_name
   })
     output$in_name3 <- renderText({
+    input$in_name
+  })
+    output$in_name4 <- renderText({
     input$in_name
   })
 
