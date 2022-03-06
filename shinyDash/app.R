@@ -185,7 +185,7 @@ server <- function(input, output) {
                                      color=Team)) + 
             geom_point(alpha=0.35, shape=16, aes(size = Win_Percentage)) +
             geom_smooth(method = "loess", se = F) +
-            ylab("Total Offensive Points Scored") +
+            ylab("Total Fantasy Points Scored") +
             xlab("Week") +
             guides(size = "none") +
             scale_color_viridis(discrete = TRUE) + 
@@ -227,7 +227,7 @@ server <- function(input, output) {
         in_name <-  input$in_name
         
         DT::datatable(data = nfl %>% filter(Division==in_name),
-                      options = list(scrollX = TRUE)
+                      options = list(scrollX = TRUE, scrollY = "500px"),
         )
         
     })
